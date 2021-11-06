@@ -70,3 +70,9 @@ jobs:
         run: |
           cd laughing-siesta
           sudo curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Push Docker
+        run: |
+          cd laughing-siesta
+          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
+          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
+          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
