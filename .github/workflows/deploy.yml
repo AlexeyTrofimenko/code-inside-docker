@@ -11,6 +11,7 @@ jobs:
     env:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       HEROKU_AUTH: ${{ secrets.HEROKU_AUTH }}
+      PORT: 8000
     steps:
       - uses: actions/checkout@v2
 
