@@ -71,12 +71,13 @@ jobs:
         run: |
           cd laughing-siesta
           sudo curl https://cli-assets.heroku.com/install.sh | sh
-          echo "machine api.heroku.com
+          echo "
+                machine api.heroku.com
                   login oleksii.trofimenko@nure.ua
-                  password $secrets.HEROKU_AUTH
+                  password $HEROKU_AUTH
                 machine git.heroku.com
                   login oleksii.trofimenko@nure.ua
-                  password $secrets.HEROKU_AUTH > ~/.netrc
+                  password $HEROKU_AUTH" > ~/.netrc
           heroku container:login
 #      - name: Build Docker
 #        run: |
