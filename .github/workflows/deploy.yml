@@ -91,3 +91,12 @@ jobs:
         run: |
           cd laughing-siesta
           heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
+      - name: Set-up db
+        run: |
+          heroku run python manage.py makemigrations -a ${{secrets.HEROKU_APP_NAME}}
+          heroku run python manage.py migrate -a ${{secrets.HEROKU_APP_NAME}}
+          heroku run DJANGO_SUPERUSER_USERNAME=root \
+          DJANGO_SUPERUSER_PASSWORD=root \
+          DJANGO_SUPERUSER_EMAIL=root@root.root \
+          python manage.py createsuperuser --noinput
+
