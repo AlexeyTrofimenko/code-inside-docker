@@ -11,7 +11,6 @@ jobs:
     env:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       HEROKU_AUTH: ${{ secrets.HEROKU_AUTH }}
-      PORT: 8000
     steps:
       - uses: actions/checkout@v2
 
@@ -61,34 +60,11 @@ jobs:
           USER myuser
 
           # run gunicorn
-          CMD gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+          CMD gunicorn core.wsgi:application --bind 0.0.0.0:\$PORT
           " > Dockerfile
           echo "
           __pycache__
           *.pyc
           venv/
           db.sqlite3" > .dockerignore
-      - name: Install Heroku CLI
-        run: |
-          cd laughing-siesta
-          sudo curl https://cli-assets.heroku.com/install.sh | sh
-          echo "
-                machine api.heroku.com
-                  login oleksii.trofimenko@nure.ua
-                  password $HEROKU_AUTH
-                machine git.heroku.com
-                  login oleksii.trofimenko@nure.ua
-                  password $HEROKU_AUTH" > ~/.netrc
-          heroku container:login
-      - name: Build Docker
-        run: |
-          cd laughing-siesta
-          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
-      - name: Push Docker
-        run: |
-          cd laughing-siesta
-          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
-      - name: Release Docker
-        run: |
-          cd laughing-siesta
-          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
+
