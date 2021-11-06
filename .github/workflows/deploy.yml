@@ -12,14 +12,21 @@ jobs:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_AUTH}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.OWNER_EMAIL}}
 
       - name: Clone CodeInside Backend Repository
         run: |
           git clone https://github.com/MagisterFelix/CodeInside
           echo ${{secrets.SETTINGS_FILE}} > CodeInside/core/settings.py
-
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          echo "
+          machine api.heroku.com
+            login $secrets.OWNER_EMAIL
+            password $secrets.HEROKU_AUTH
+          machine git.heroku.com
+            login $secrets.OWNER_EMAIL
+            password $secrets.HEROKU_AUTH" > ~/.netrc
+          registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
+          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
+          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
