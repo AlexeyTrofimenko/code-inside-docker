@@ -97,8 +97,5 @@ jobs:
           heroku addons:create heroku-postgresql:hobby-dev -a ${{secrets.HEROKU_APP_NAME}}
           heroku run python manage.py makemigrations -a ${{secrets.HEROKU_APP_NAME}}
           heroku run python manage.py migrate -a ${{secrets.HEROKU_APP_NAME}}
-          heroku run DJANGO_SUPERUSER_USERNAME=root \
-          DJANGO_SUPERUSER_PASSWORD=root \
-          DJANGO_SUPERUSER_EMAIL=root@root.root \
-          python manage.py createsuperuser --noinput -a ${{secrets.HEROKU_APP_NAME}}
+
 
