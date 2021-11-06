@@ -93,6 +93,7 @@ jobs:
           heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
       - name: Set-up db
         run: |
+          cd laughing-siesta
           heroku run python manage.py makemigrations -a ${{secrets.HEROKU_APP_NAME}}
           heroku run python manage.py migrate -a ${{secrets.HEROKU_APP_NAME}}
           heroku run DJANGO_SUPERUSER_USERNAME=root \
