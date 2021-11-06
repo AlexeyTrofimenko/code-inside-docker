@@ -12,14 +12,18 @@ jobs:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          python-version: 3.9
+          heroku_api_key: ${{secrets.HEROKU_AUTH}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.OWNER_EMAIL}}
+          usedocker: true
 
       - name: Clone CodeInside Backend Repository
         run: |
           git clone https://github.com/MagisterFelix/CodeInside
-      - name: Make DockerFiles 
+          echo ${{secrets.SETTINGS_FILE}} > CodeInside/core/settings.py
+      - name: Make DockerFile
         run: |
           cd CodeInside
           echo "
@@ -69,7 +73,19 @@ jobs:
           *.pyc
           venv/
           db.sqlite3" > .dockerignore
+          
       - name: Build Docker 
         run: |
           cd CodeInside
-          docker build -t web:latest .
+          heroku config:set SECRET_KEY="53175bcc0524f37b47062fafdda28e3f8eb91d519ca0a184ca71bbebe72f969a" -a ${{secrets.HEROKU_APP_NAME}}
+          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
+          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
+          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
+          heroku run python manage.py makemigrations -a ${{secrets.HEROKU_APP_NAME}}
+          heroku run python manage.py migrate -a ${{secrets.HEROKU_APP_NAME}}
+          heroku run DJANGO_SUPERUSER_USERNAME=root \
+          DJANGO_SUPERUSER_PASSWORD=root \
+          DJANGO_SUPERUSER_EMAIL=root@root.root \
+          python manage.py createsuperuser --noinput
+
+
