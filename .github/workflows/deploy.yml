@@ -69,8 +69,8 @@ jobs:
       - name: Install Heroku CLI
         run: |
           cd laughing-siesta
-          curl https://cli-assets.heroku.com/install.sh | sh
-          heroku config:set SECRET_KEY="53175bcc0524f37b47062fafdda28e3f8eb91d519ca0a184ca71bbebe72f969a" -a ${{secrets.HEROKU_APP_NAME}}
+          sudo curl https://cli-assets.heroku.com/install.sh | sh
+          sudo heroku config:set SECRET_KEY=${{secrets.HEROKU_AUTH}} -a ${{secrets.HEROKU_APP_NAME}}
           echo "
           machine api.heroku.com
             login $secrets.OWNER_EMAIL
