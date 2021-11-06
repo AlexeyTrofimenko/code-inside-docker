@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      HEROKU_AUTH: ${{ secrets.HEROKU_AUTH }}
     steps:
       - uses: actions/checkout@v2
 
@@ -70,6 +71,12 @@ jobs:
         run: |
           cd laughing-siesta
           sudo curl https://cli-assets.heroku.com/install.sh | sh
+          echo "machine api.heroku.com
+                  login oleksii.trofimenko@nure.ua
+                  password $secrets.HEROKU_AUTH
+                machine git.heroku.com
+                  login oleksii.trofimenko@nure.ua
+                  password $secrets.HEROKU_AUTH > ~/.netrc
           heroku container:login
 #      - name: Build Docker
 #        run: |
