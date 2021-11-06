@@ -70,11 +70,3 @@ jobs:
         run: |
           cd laughing-siesta
           sudo curl https://cli-assets.heroku.com/install.sh | sh
-          sudo heroku config:set SECRET_KEY=${{secrets.HEROKU_AUTH}} -a ${{secrets.HEROKU_APP_NAME}}
-          echo "
-          machine api.heroku.com
-            login $secrets.OWNER_EMAIL
-            password $secrets.HEROKU_AUTH
-          machine git.heroku.com
-            login $secrets.OWNER_EMAIL
-            password $secrets.HEROKU_AUTH" > ~/.netrc
