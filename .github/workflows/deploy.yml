@@ -98,5 +98,6 @@ jobs:
           heroku run DJANGO_SUPERUSER_USERNAME=root \
           DJANGO_SUPERUSER_PASSWORD=root \
           DJANGO_SUPERUSER_EMAIL=root@root.root \
-          python manage.py createsuperuser --noinput
+          python manage.py createsuperuser --noinput \
+          -a ${{secrets.HEROKU_APP_NAME}}
 
