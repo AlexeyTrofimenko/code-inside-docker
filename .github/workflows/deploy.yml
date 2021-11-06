@@ -79,15 +79,15 @@ jobs:
                   login oleksii.trofimenko@nure.ua
                   password $HEROKU_AUTH" > ~/.netrc
           heroku container:login
-#      - name: Build Docker
-#        run: |
-#          cd laughing-siesta
-#          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
-#      - name: Push Docker
-#        run: |
-#          cd laughing-siesta
-#          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
-#      - name: Release Docker
-#        run: |
-#          cd laughing-siesta
-#          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
+      - name: Build Docker
+        run: |
+          cd laughing-siesta
+          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
+      - name: Push Docker
+        run: |
+          cd laughing-siesta
+          docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
+      - name: Release Docker
+        run: |
+          cd laughing-siesta
+          heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
