@@ -77,6 +77,6 @@ jobs:
           machine git.heroku.com
             login $secrets.OWNER_EMAIL
             password $secrets.HEROKU_AUTH" > ~/.netrc
-          registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
+          docker build -t registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web .
           docker push registry.heroku.com/${{secrets.HEROKU_APP_NAME}}/web
           heroku container:release -a ${{secrets.HEROKU_APP_NAME}} web
